@@ -200,22 +200,31 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9f8-Iu-4qo">
+                                <rect key="frame" x="10" y="161.5" width="394" height="196"/>
+                                <color key="backgroundColor" systemColor="systemOrangeColor"/>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="mgP-0E-Lrs"/>
                         <color key="backgroundColor" systemColor="systemGray5Color"/>
                         <constraints>
                             <constraint firstItem="v4E-05-sw0" firstAttribute="top" secondItem="EZT-E5-nkG" secondAttribute="bottom" constant="10" id="3J9-rf-3aD"/>
                             <constraint firstItem="yLA-Go-icF" firstAttribute="top" secondItem="mgP-0E-Lrs" secondAttribute="top" constant="30" id="3pM-ax-fjp"/>
+                            <constraint firstItem="EZT-E5-nkG" firstAttribute="top" secondItem="9f8-Iu-4qo" secondAttribute="bottom" constant="10" id="678-cO-jH8"/>
                             <constraint firstItem="E24-ex-XEB" firstAttribute="centerY" secondItem="mgP-0E-Lrs" secondAttribute="centerY" id="6cJ-C6-ROM"/>
                             <constraint firstItem="EZT-E5-nkG" firstAttribute="centerX" secondItem="mgP-0E-Lrs" secondAttribute="centerX" id="9PD-6i-1sJ"/>
+                            <constraint firstItem="9f8-Iu-4qo" firstAttribute="top" secondItem="yLA-Go-icF" secondAttribute="bottom" constant="10" id="JFV-K1-jGk"/>
                             <constraint firstItem="v4E-05-sw0" firstAttribute="centerX" secondItem="mgP-0E-Lrs" secondAttribute="centerX" id="S4V-Wj-VQ5"/>
                             <constraint firstItem="E24-ex-XEB" firstAttribute="centerX" secondItem="mgP-0E-Lrs" secondAttribute="centerX" id="T2f-NL-b5e"/>
                             <constraint firstItem="yLA-Go-icF" firstAttribute="centerX" secondItem="mgP-0E-Lrs" secondAttribute="centerX" id="VlQ-bX-wgg"/>
                             <constraint firstItem="E24-ex-XEB" firstAttribute="top" secondItem="v4E-05-sw0" secondAttribute="bottom" constant="1" id="bPe-a1-if2"/>
+                            <constraint firstItem="9f8-Iu-4qo" firstAttribute="leading" secondItem="mgP-0E-Lrs" secondAttribute="leading" constant="10" id="jfK-CS-5iq"/>
+                            <constraint firstItem="9f8-Iu-4qo" firstAttribute="centerX" secondItem="mgP-0E-Lrs" secondAttribute="centerX" id="pBZ-CN-Ew9"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="TqY-UR-4od"/>
                     <connections>
+                        <outlet property="gameStatusLabel" destination="EZT-E5-nkG" id="e4e-yF-qe3"/>
                         <outlet property="hintLabel" destination="v4E-05-sw0" id="ybn-u2-kH6"/>
                         <outlet property="playerNameLabel" destination="yLA-Go-icF" id="OCD-1z-7Io"/>
                         <outlet property="wordLabel" destination="E24-ex-XEB" id="ExA-Ag-lGm"/>
@@ -803,6 +812,9 @@
         </systemColor>
         <systemColor name="systemGray5Color">
             <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemOrangeColor">
+            <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

@@ -66,7 +66,7 @@ class StartGameViewController: UIViewController, UIPickerViewDataSource, UIPicke
                 hostTable.spyList = spyList
                 
                 hostDocRef = Firestore.firestore().document("\(title!)/host")
-                let data = ["gameStatus": "gameIsOn",
+                let data = ["gameIsOn": true,
                             "playerNumber": playerNumber,
                             "spyNumber": spyNumber,
                             "citizenWord": citizenWord,
@@ -75,11 +75,13 @@ class StartGameViewController: UIViewController, UIPickerViewDataSource, UIPicke
                 
                 
                 for spy in spyList{
-                    let data = ["\(spy)": spyWord]
+                    let dic = ["word": spyWord]
+                    let data = ["\(spy)": dic]
                     sendData(to: playerDocRef, data, merge: true)
                 }
                 for citizen in citizensList{
-                    let data = ["\(citizen)": citizenWord]
+                    let dic = ["word": citizenWord]
+                    let data = ["\(citizen)": dic]
                     sendData(to: playerDocRef, data, merge: true)
                 }
             }
