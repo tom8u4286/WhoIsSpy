@@ -20,6 +20,7 @@
 		DDE4B9AB2631D1720052214D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DDE4B9AA2631D1720052214D /* GoogleService-Info.plist */; };
 		DDE4B9C526326DBB0052214D /* StartGameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE4B9C426326DBB0052214D /* StartGameViewController.swift */; };
 		DDE4B9C826326E0E0052214D /* HostRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE4B9C726326E0E0052214D /* HostRoomViewController.swift */; };
+		DDE4B9CD2637A9F20052214D /* TableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE4B9CC2637A9F20052214D /* TableCell.swift */; };
 		F97BDAC87B5A6E481FB61A4F /* Pods_WhoIsSpy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E47FC53470834C6360210A6 /* Pods_WhoIsSpy.framework */; };
 /* End PBXBuildFile section */
 
@@ -42,6 +43,7 @@
 		DDE4B9AA2631D1720052214D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		DDE4B9C426326DBB0052214D /* StartGameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartGameViewController.swift; sourceTree = "<group>"; };
 		DDE4B9C726326E0E0052214D /* HostRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostRoomViewController.swift; sourceTree = "<group>"; };
+		DDE4B9CC2637A9F20052214D /* TableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +104,7 @@
 				DDE4B9A2263181FC0052214D /* CreateRoomViewController.swift */,
 				DDE4B9C426326DBB0052214D /* StartGameViewController.swift */,
 				DDE4B9C726326E0E0052214D /* HostRoomViewController.swift */,
+				DDE4B9CC2637A9F20052214D /* TableCell.swift */,
 				DDE4B9832631682F0052214D /* Main.storyboard */,
 				DDE4B986263168320052214D /* Assets.xcassets */,
 				DDE4B988263168320052214D /* LaunchScreen.storyboard */,
@@ -233,6 +236,7 @@
 				DDE4B9822631682F0052214D /* FirstViewController.swift in Sources */,
 				DDE4B99F2631764F0052214D /* PlayerViewController.swift in Sources */,
 				DDE4B9A7263183940052214D /* PlayerRoomViewController.swift in Sources */,
+				DDE4B9CD2637A9F20052214D /* TableCell.swift in Sources */,
 				DDE4B97E2631682F0052214D /* AppDelegate.swift in Sources */,
 				DDE4B9802631682F0052214D /* SceneDelegate.swift in Sources */,
 				DDE4B9A3263181FC0052214D /* CreateRoomViewController.swift in Sources */,

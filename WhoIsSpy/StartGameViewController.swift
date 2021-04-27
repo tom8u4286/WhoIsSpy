@@ -10,58 +10,102 @@ import Firebase
 
 class StartGameViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     
+    let numberList = ["1人","2人","3人","4人","5人"]
     @IBOutlet var pickerView: UIPickerView!
+    
     @IBOutlet var citizenWordField: UITextField!
     @IBOutlet var spyWordField: UITextField!
+    @IBOutlet var playerNumberLabel: UILabel!
+    @IBOutlet var playerListTextView: UITextView!
     
     var citizenWord = ""
     var spyWord = ""
     var playerNumber = 5
     var spyNumber = 1
+    var playerNameList = [String](){ didSet{
+        playerNumber = playerNameList.count
+        playerNumberLabel.text = "\(playerNumber) 人"
+        playerListTextView.text = playerNameList.joined(separator: ", ")
+    }}
     
-    let numberList = ["1人","2人","3人","4人","5人"]
-    
-    var DocRef: DocumentReference!
+    var hostDocRef: DocumentReference!
+    var playerDocRef: DocumentReference!
+    var quoteListener: ListenerRegistration!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        let roomId = title!
+        hostDocRef = Firestore.firestore().document("\(roomId)/host")
+        playerDocRef = Firestore.firestore().document("\(roomId)/players")
+        print("StarGameViewController, viewDidLoad(): roomID is \(roomId)")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        quoteListener = playerDocRef.addSnapshotListener{ (docSnapshot, error) in
+            guard let docSnapshot = docSnapshot, docSnapshot.exists else { return }
+            if let data = docSnapshot.data(){
+                self.playerNameList = data.keys.filter { $0 != "DocumentExist" }
+            }
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "gameIsOnSegue" {
-            if checkFields(){
-                let controller = segue.destination as! HostRoomViewController
-                controller.title = title
+            if checkFieldsValid(){
+                let (spyList, citizensList) = chooseSpies()
                 
                 citizenWord = citizenWordField.text!
                 spyWord = spyWordField.text!
                 
-                DocRef = Firestore.firestore().document("\(title!)/host")
+                let hostTable = segue.destination as! HostRoomViewController
+                hostTable.title = title
+                hostTable.citizenWord = citizenWord
+                hostTable.spyWord = spyWord
+                hostTable.citizenList = citizensList
+                hostTable.spyList = spyList
+                
+                hostDocRef = Firestore.firestore().document("\(title!)/host")
                 let data = ["gameStatus": "gameIsOn",
                             "playerNumber": playerNumber,
                             "spyNumber": spyNumber,
                             "citizenWord": citizenWord,
                             "spyWord": spyWord] as [String : Any]
-                print(data)
-                sendData(data)
+                sendData(to: hostDocRef, data, merge: false)
+                
+                
+                for spy in spyList{
+                    let data = ["\(spy)": spyWord]
+                    sendData(to: playerDocRef, data, merge: true)
+                }
+                for citizen in citizensList{
+                    let data = ["\(citizen)": citizenWord]
+                    sendData(to: playerDocRef, data, merge: true)
+                }
             }
         }
     }
     
-    func checkFields() -> Bool{
+    func chooseSpies() -> ([String], [String]){
+        playerNameList.shuffle()
+        let spies = Array(playerNameList.prefix(spyNumber))
+        let citizens = Array(playerNameList.suffix(playerNameList.count-spyNumber))
+        return (spies, citizens)
+    }
+    
+    func checkFieldsValid() -> Bool{
         if citizenWordField.text != ""{
             if spyWordField.text != ""{
                 if spyNumber < playerNumber{
                     return true
                 }else{
-                    print("Too many spy!")
+                    print("⚠️ Too many spy!")
                 }
             }else{
-                print("Spy word is nil!")
+                print("⚠️ Spy word is nil!")
             }
         }else{
-            print("Citizen word is nil!")
+            print("⚠️ Citizen word is nil!")
         }
         return false
     }
@@ -81,8 +125,8 @@ class StartGameViewController: UIViewController, UIPickerViewDataSource, UIPicke
         spyNumber = Int(str.strip("人"))!
     }
     
-    func sendData(_ data: [String: Any]){
-        DocRef.setData(data){ error in
+    func sendData(to docRef: DocumentReference, _ data: [String: Any], merge: Bool){
+        docRef.setData(data, merge: merge){ error in
             if let error = error{
                 print("⚠️ Got an error sending data: \(error.localizedDescription)")
             }
