@@ -19,20 +19,26 @@ class PlayerRoomViewController: UIViewController {
     @IBOutlet var wordLabel: UILabel!
     @IBOutlet var gameStatusLabel: UILabel!
     
+    @IBOutlet var outerVerticalStackView: UIStackView!
+    @IBOutlet var allPlayersStackView: UIStackView!
+    
     var playerEmoji = ""
     var playerName = ""
     var roomId = ""
     var gameIsOn = false
-    var allPlayerList = [[String:[String:String]]]()//["Alice":["emoji": "😎"]]
+    var allPlayerList = [String:[String:String]]()//["Alice":["emoji": "😎"]]
     @IBOutlet var playerNameLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        playerNameLabel.text = "玩家名稱： " + playerEmoji + playerName
+        playerNameLabel.text =  playerEmoji + playerName
         roomId = title!
         hostDocRef = Firestore.firestore().document("\(roomId)/host")
         playerDocRef = Firestore.firestore().document("\(roomId)/players")
+        
+        outerVerticalStackView.distribution = .fillEqually
+        allPlayersStackView.alignment = .center
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -40,22 +46,27 @@ class PlayerRoomViewController: UIViewController {
         playerListener = playerDocRef.addSnapshotListener{ (docSnapshot, error) in
             guard let docSnapshot = docSnapshot, docSnapshot.exists else { return }
             if let data = docSnapshot.data(){
+
+                if !self.gameIsOn{
+                    let newNameList = Array(data.keys.filter {$0 != "DocumentExist"})
+                    let oldNameList = Array(self.allPlayerList.keys)
+                    let difference = newNameList.difference(from: oldNameList)
+                    
+                    if difference.count != 0{
+                        for name in difference{
+                            let dic = data[name] as! [String: Any]
+                            let emoji = dic["emoji"] as! String
+                            print("\(name): \(emoji)")
+                            
+                            self.allPlayerList[name] = ["emoji": emoji]
+                            self.stackViewUpdate(name: name, emoji: emoji)
+                        }
+                    }
+                }
                 
                 let dic = data[self.playerName] as! [String: Any]
-                let playerWord = dic["word"] as! String
-                self.wordLabel.text = playerWord
-                
-                
-                if !self.gameIsOn{
-                    var temp = [[String:[String:String]]]()
-                    for name in data.keys.filter { $0 != "DocumentExist" }{
-                        let dic = data[name] as! [String: Any]
-                        let emoji = dic["emoji"] as! String
-                        let stru = [name: ["emoji": emoji]]
-                        temp.append(stru)
-                    }
-                    self.allPlayerList = temp
-                    print(self.allPlayerList)
+                if let playerWord = dic["word"] as? String {
+                    self.wordLabel.text = playerWord
                 }
             }
         }
@@ -74,15 +85,32 @@ class PlayerRoomViewController: UIViewController {
                 }
             }
         }
+    }
+    
+    func stackViewUpdate(name: String, emoji: String){
+        let attributedText = NSMutableAttributedString(string: "\(emoji)\n", attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .largeTitle)])
+        attributedText.append(NSAttributedString(string: "\(name)", attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .title2)]))
+        let label = UILabel()
+        label.attributedText = attributedText
+        label.numberOfLines = 2
+        label.textAlignment = .center
+        
+        print("count: \(allPlayerList.count)")
+        if allPlayerList.count < 5{
+            allPlayersStackView.addArrangedSubview(label)
+        }
+        if allPlayerList.count == 5{
+            let newHStack = UIStackView()
+            newHStack.tag = 1
+            newHStack.addArrangedSubview(label)
+            outerVerticalStackView.addArrangedSubview(newHStack)
+        }
+        if allPlayerList.count > 5{
+            let HStack = outerVerticalStackView.viewWithTag(1) as! UIStackView
+            HStack.addArrangedSubview(label)
+        }
         
     }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "" {
-            
-        }
-    }
-    
     
     func sendData(to docRef: DocumentReference, _ data: [String: Any], merge: Bool){
         docRef.setData(data, merge: merge){ error in
@@ -92,4 +120,12 @@ class PlayerRoomViewController: UIViewController {
         }
     }
 
+}
+
+extension Array where Element: Hashable {
+    func difference(from other: [Element]) -> [Element] {
+        let thisSet = Set(self)
+        let otherSet = Set(other)
+        return Array(thisSet.symmetricDifference(otherSet))
+    }
 }
