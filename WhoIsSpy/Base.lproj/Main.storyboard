@@ -199,13 +199,8 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Uvj-ha-V7J">
+                            <stackView opaque="NO" tag="10" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Uvj-ha-V7J">
                                 <rect key="frame" x="10" y="98" width="394" height="194"/>
-                                <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9f8-Iu-4qo">
-                                        <rect key="frame" x="0.0" y="0.0" width="394" height="194"/>
-                                    </stackView>
-                                </subviews>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -234,10 +229,9 @@
                     </view>
                     <navigationItem key="navigationItem" id="TqY-UR-4od"/>
                     <connections>
-                        <outlet property="allPlayersStackView" destination="9f8-Iu-4qo" id="Yr4-9O-s07"/>
                         <outlet property="gameStatusLabel" destination="EZT-E5-nkG" id="e4e-yF-qe3"/>
                         <outlet property="hintLabel" destination="v4E-05-sw0" id="ybn-u2-kH6"/>
-                        <outlet property="outerVerticalStackView" destination="Uvj-ha-V7J" id="34h-qv-Fsk"/>
+                        <outlet property="outerVStack" destination="Uvj-ha-V7J" id="34h-qv-Fsk"/>
                         <outlet property="playerNameLabel" destination="yLA-Go-icF" id="OCD-1z-7Io"/>
                         <outlet property="wordLabel" destination="E24-ex-XEB" id="ExA-Ag-lGm"/>
                     </connections>
@@ -673,13 +667,8 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="xKc-Cx-MFq">
+                            <stackView opaque="NO" tag="10" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="xKc-Cx-MFq">
                                 <rect key="frame" x="10" y="98" width="394" height="230"/>
-                                <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Obd-cg-tom">
-                                        <rect key="frame" x="0.0" y="0.0" width="394" height="230"/>
-                                    </stackView>
-                                </subviews>
                                 <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="230" id="6u6-B7-kcX"/>
@@ -692,6 +681,7 @@
                             </stackView>
                             <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dS8-WX-yAU">
                                 <rect key="frame" x="202" y="485.5" width="150" height="120"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="120" id="ZMR-fB-ERj"/>
                                     <constraint firstAttribute="width" constant="150" id="sXb-ho-qCa"/>
@@ -734,7 +724,6 @@
                     <navigationItem key="navigationItem" id="61J-vD-WCB"/>
                     <connections>
                         <outlet property="citizenWordField" destination="Ebi-jL-K45" id="Jl3-FV-Zqt"/>
-                        <outlet property="innerHStackView" destination="Obd-cg-tom" id="xgg-Hk-YA1"/>
                         <outlet property="outerVStack" destination="xKc-Cx-MFq" id="3zu-m4-qEF"/>
                         <outlet property="pickerView" destination="dS8-WX-yAU" id="DwY-YW-Fju"/>
                         <outlet property="playerNumberLabel" destination="f5Q-Ga-sky" id="Z9T-TK-Zd7"/>

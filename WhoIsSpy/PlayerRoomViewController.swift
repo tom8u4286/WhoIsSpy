@@ -9,107 +9,142 @@ import UIKit
 import Firebase
 
 class PlayerRoomViewController: UIViewController {
-
-    var hostDocRef: DocumentReference!
-    var playerDocRef: DocumentReference!
-    var playerListener: ListenerRegistration!
-    var hostListener: ListenerRegistration!
     
     @IBOutlet var hintLabel: UILabel!
     @IBOutlet var wordLabel: UILabel!
     @IBOutlet var gameStatusLabel: UILabel!
-    
-    @IBOutlet var outerVerticalStackView: UIStackView!
-    @IBOutlet var allPlayersStackView: UIStackView!
+    @IBOutlet var playerNameLabel: UILabel!
+    @IBOutlet var outerVStack: UIStackView!
     
     var playerEmoji = ""
     var playerName = ""
     var roomId = ""
     var gameIsOn = false
-    var allPlayerList = [String:[String:String]]()//["Alice":["emoji": "😎"]]
-    @IBOutlet var playerNameLabel: UILabel!
+    var playerInRoom = false
+    
+    //資料長相：["Alice":["emoji": "😎", "word": "something"]]
+    var playerList = [String:[String:String]]()
+    
+    var roomDocRef: DocumentReference!
+    var docListener: ListenerRegistration!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        playerNameLabel.text =  playerEmoji + playerName
+        playerInRoom = true
+        playerNameLabel.text = playerEmoji + playerName
         roomId = title!
-        hostDocRef = Firestore.firestore().document("\(roomId)/host")
-        playerDocRef = Firestore.firestore().document("\(roomId)/players")
+        roomDocRef = Firestore.firestore().document("GameRooms/\(roomId)")
         
-        outerVerticalStackView.distribution = .fillEqually
-        allPlayersStackView.alignment = .center
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "離開遊戲", style: .plain, target: self,action: #selector(leaveRoom))
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        playerListener = playerDocRef.addSnapshotListener{ (docSnapshot, error) in
+        docListener = roomDocRef.addSnapshotListener{ (docSnapshot, error) in
             guard let docSnapshot = docSnapshot, docSnapshot.exists else { return }
             if let data = docSnapshot.data(){
-
-                if !self.gameIsOn{
-                    let newNameList = Array(data.keys.filter {$0 != "DocumentExist"})
-                    let oldNameList = Array(self.allPlayerList.keys)
-                    let difference = newNameList.difference(from: oldNameList)
-                    
-                    if difference.count != 0{
-                        for name in difference{
-                            let dic = data[name] as! [String: Any]
-                            let emoji = dic["emoji"] as! String
-                            print("\(name): \(emoji)")
-                            
-                            self.allPlayerList[name] = ["emoji": emoji]
-                            self.stackViewUpdate(name: name, emoji: emoji)
-                        }
-                    }
+                if self.playerInRoom{
+                    self.checkIfGameIsOn(data)
+//                    if !self.gameIsOn{
+                        self.checkIfNewPlayerEnteredOrLeaved(data)
+//                    }
                 }
+            }
+        }
+    }
+    
+    func checkIfNewPlayerEnteredOrLeaved(_ data: [String: Any]){
+        let newNameList = Array(data.keys)
+        let oldNameList = Array(self.playerList.keys)
+        let difference = newNameList.difference(from: oldNameList)
+        
+        if difference.count != 0{
+            //有新玩家進入遊戲間
+            if newNameList.count - oldNameList.count > 0{
+                print("👏 PlayerRoomViewController: \(difference) entered this room!")
+                for name in difference{
+                    let dic = data[name] as! [String: Any]
+                    let emoji = dic["emoji"] as! String
+                    print("\(name): \(emoji)")
+                    
+                    self.playerList[name] = ["emoji": emoji]
+                }
+            }
+            //有玩家離開遊戲
+            if oldNameList.count - newNameList.count > 0{
+                print("👋 PlayerRoomViewController: \(difference) leaved this room!")
+                for name in difference{
+                    self.playerList.removeValue(forKey: name)
+                }
+            }
+            outerVStack.removeAllArrangedSubviews()
+            redrawStackView()
+        }
+        
+        
+    }
+    
+    func checkIfGameIsOn(_ data: [String: Any]){
+        if let hostData = data["host"] as? [String: Any]{
+            if hostData["gameIsOn"]! as! Bool{
+                print("✅ PlayerRoomViewController.chekIfGameIsOn(): The game is on!")
+                gameIsOn = true
                 
                 let dic = data[self.playerName] as! [String: Any]
                 if let playerWord = dic["word"] as? String {
                     self.wordLabel.text = playerWord
                 }
-            }
-        }
-        hostListener = hostDocRef.addSnapshotListener{ (docSnapshot, error) in
-            guard let docSnapshot = docSnapshot, docSnapshot.exists else { return }
-            if let data = docSnapshot.data(){
-                let gameIsOn = data["gameIsOn"] as! Bool?
-                if gameIsOn ?? false{
-                    self.gameStatusLabel.isHidden = true
-                    self.hintLabel.isHidden = false
-                    self.wordLabel.isHidden = false
-                }else{
-                    self.gameStatusLabel.isHidden = false
-                    self.hintLabel.isHidden = true
-                    self.wordLabel.isHidden = true
-                }
+                
+                self.gameStatusLabel.isHidden = true
+                self.hintLabel.isHidden = false
+                self.wordLabel.isHidden = false
+            }else{
+                print("❌ PlayerRoomViewController.chekIfGameIsOn(): The game is off!")
+                gameIsOn = false
+                self.gameStatusLabel.isHidden = false
+                self.hintLabel.isHidden = true
+                self.wordLabel.isHidden = true
+                wordLabel.text = ""
             }
         }
     }
     
-    func stackViewUpdate(name: String, emoji: String){
-        let attributedText = NSMutableAttributedString(string: "\(emoji)\n", attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .largeTitle)])
-        attributedText.append(NSAttributedString(string: "\(name)", attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .title2)]))
-        let label = UILabel()
-        label.attributedText = attributedText
-        label.numberOfLines = 2
-        label.textAlignment = .center
-        
-        print("count: \(allPlayerList.count)")
-        if allPlayerList.count < 5{
-            allPlayersStackView.addArrangedSubview(label)
-        }
-        if allPlayerList.count == 5{
-            let newHStack = UIStackView()
-            newHStack.tag = 1
-            newHStack.addArrangedSubview(label)
-            outerVerticalStackView.addArrangedSubview(newHStack)
-        }
-        if allPlayerList.count > 5{
-            let HStack = outerVerticalStackView.viewWithTag(1) as! UIStackView
-            HStack.addArrangedSubview(label)
+    func redrawStackView(){
+        print("redrawStackView(): playerList: \(playerList)")
+        for num in 0...(playerList.count-1)/5{
+            let HStack = UIStackView()
+            HStack.tag = num
+            HStack.axis  = .horizontal
+            HStack.alignment = .center
+            HStack.distribution = .fillEqually
+            HStack.spacing = 10
+            outerVStack.addArrangedSubview(HStack)
         }
         
+        var index = 0
+        for (name, dic) in playerList{
+            if let assignedStack = outerVStack.viewWithTag(index/5) as? UIStackView{
+                let emoji = dic["emoji"] ?? "No emoji got."
+                let attributedText = NSMutableAttributedString(string: "\(emoji)\n", attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .largeTitle)])
+                attributedText.append(NSAttributedString(string: "\(name)", attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .title2)]))
+                let label = UILabel()
+                label.attributedText = attributedText
+                label.numberOfLines = 2
+                label.textAlignment = .center
+                assignedStack.addArrangedSubview(label)
+            }
+            index += 1
+        }
+    }
+    @objc func leaveRoom(){
+        roomDocRef.updateData(["\(playerName)": FieldValue.delete()])
+        playerEmoji = ""
+        playerName = ""
+        roomId = ""
+        gameIsOn = false
+        playerInRoom = false
+        self.navigationController?.popViewController(animated: true)
     }
     
     func sendData(to docRef: DocumentReference, _ data: [String: Any], merge: Bool){
@@ -119,7 +154,6 @@ class PlayerRoomViewController: UIViewController {
             }
         }
     }
-
 }
 
 extension Array where Element: Hashable {
@@ -127,5 +161,17 @@ extension Array where Element: Hashable {
         let thisSet = Set(self)
         let otherSet = Set(other)
         return Array(thisSet.symmetricDifference(otherSet))
+    }
+}
+extension UIStackView {
+    func removeAllArrangedSubviews() {
+        let removedSubviews = arrangedSubviews.reduce([]) { (allSubviews, subview) -> [UIView] in
+            self.removeArrangedSubview(subview)
+            return allSubviews + [subview]
+        }
+        // Deactivate all constraints
+        NSLayoutConstraint.deactivate(removedSubviews.flatMap({ $0.constraints }))
+        // Remove the views from self
+        removedSubviews.forEach({ $0.removeFromSuperview() })
     }
 }

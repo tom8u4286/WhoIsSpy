@@ -14,21 +14,21 @@ class PlayerViewController: UIViewController {
     @IBOutlet var roomIdField: UITextField!
     @IBOutlet var spinner: UIActivityIndicatorView!
     @IBOutlet var chooseYourEmojiLabel: UILabel!
-    
     @IBOutlet var EmojiButtonCollection: [UIButton]!
+    @IBOutlet var enterButton: UIButton!
     
     var playerEmoji = "😃"
     var playerName = ""
     var roomId = ""
     
-    @IBOutlet var enterButton: UIButton!
+//    var playerDocRef: DocumentReference!
+//    var hostDocRef: DocumentReference!
     
-    var playerDocRef: DocumentReference!
-    var hostDocRef: DocumentReference!
+    var gameRoomsDB = Firestore.firestore().collection("GameRooms")
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         title = "玩家"
         navigationController?.setNavigationBarHidden(false, animated: true)
     }
@@ -38,23 +38,8 @@ class PlayerViewController: UIViewController {
             playerName = playerNameField.text!
             roomId = roomIdField.text!
             if checkFieldsValid(){
-                
                 spinner.startAnimating()
-                
-                //MARK: -
-                //MARK: 1.如果有玩家的playerName取名為host，會有問題。待解決。
-                //MARK: 2.應加入playerName檢查機制，確保沒有相同名稱的player。待解決。
-                hostDocRef = Firestore.firestore().document("\(roomId)/host")
-                hostDocRef.getDocument { (document, error) in
-                    if ((document?.exists) == true) {
-                        print("✅ Room Exists. Perform Segue!")
-                        //TODO: 這種直接performSegue的作法可能不是很好，接下來待改進
-                        self.performSegue(withIdentifier: "playerEnterRoom", sender: nil)
-                    }else{
-                        print("⚠️ room doesn't exist!")
-                    }
-                    self.spinner.stopAnimating()
-                }
+                ifRoomExist()
             }
         }
         return false
@@ -68,15 +53,13 @@ class PlayerViewController: UIViewController {
             controller.title = roomId
             
             //目前設計為第一階Collection為room的名稱(roomId)
-            let dic = ["emoji": playerEmoji, "word": "connected"]
+            //4.29之後設計為Collection只稱為GameRooms，document名稱為Room房名
+            let dic = ["emoji": playerEmoji, "word": "", "connected": true] as [String: Any]
             let data = ["\(playerName)": dic]
-            playerDocRef = Firestore.firestore().document("\(roomId)/players")
-            print("playerDocRef: \(playerDocRef)")
-            sendData(to: playerDocRef, data, merge: true)
+            
+            sendData(to: gameRoomsDB.document("\(roomId)"), data, merge: true)
         }
     }
-    
-    
     
     //MARK: - functions
     //MARK: -
@@ -84,19 +67,29 @@ class PlayerViewController: UIViewController {
     @IBAction func emojiButtonAction(_ sender: UIButton) {
         playerEmoji = sender.title(for: .normal)!
         chooseYourEmojiLabel.text = "選擇你的Emoji: \(playerEmoji)"
-        resetEmojiButtons()
+        for button in EmojiButtonCollection{ button.backgroundColor = .none }
         sender.backgroundColor = .lightGray
     }
     
-    func resetEmojiButtons(){
-        for button in EmojiButtonCollection{
-            button.backgroundColor = .none
+    func ifRoomExist(){
+        //MARK: -
+        //MARK: 1.如果有玩家的playerName取名為host，會有問題。待解決。
+        //MARK: 2.應加入playerName檢查機制，確保沒有相同名稱的player。待解決。
+//                DocRef = gameRoomDB.document("\(roomId)/host")
+        let docRef = gameRoomsDB.document("\(roomId)")
+        docRef.getDocument { (document, error) in
+            if ((document?.exists) == true) {
+                print("✅ PlayerViewController.checkRoomExist(): Room Exists. Perform Segue!")
+                //TODO: 這種直接performSegue的作法可能不是很好，接下來待改進
+                //這邊如果用return true的方式，由於getDocument要耗時(async)
+                //在還沒取得firebase document之前，function就直接先return false了，
+                //所以永遠不會執行prepare() (永遠不會執行Segue)
+                self.performSegue(withIdentifier: "playerEnterRoom", sender: nil)
+            }else{
+                print("⚠️ PlayerViewController.checkRoomExist(): room doesn't exist!")
+            }
+            self.spinner.stopAnimating()
         }
-    }
-    
-    
-    func checkRoomExist() -> Bool{
-        return false
     }
     
     func checkFieldsValid() -> Bool{
@@ -104,17 +97,20 @@ class PlayerViewController: UIViewController {
         print("roomIdField.text: \(roomId)")
         
         if playerNameField.text != ""{
-            if roomIdField.text != ""{ return true }
-            else{ print("⚠️ roomIdField is Empty!")}
-        }else{ print("⚠️ playerNameField is Empty!")}
-        print("✅ Fields Valid.")
+            if roomIdField.text != ""{
+                print("✅ PlayerViewController.checkFieldsValid(): Fields Valid.")
+                return true
+            }
+            else{ print("⚠️ PlayerViewController.checkFieldsValid(): roomIdField is Empty!")}
+        }else{ print("⚠️ PlayerViewController.checkFieldsValid(): playerNameField is Empty!")}
+
         return false
     }
     
     func sendData(to docRef: DocumentReference, _ data: [String: Any], merge: Bool){
         docRef.setData(data, merge: merge){ error in
             if let error = error{
-                print("⚠️ Got an error sending data: \(error.localizedDescription)")
+                print("⚠️ PlayerViewController.sendData(): Got an error sending data: \(error.localizedDescription)")
             }
         }
     }
