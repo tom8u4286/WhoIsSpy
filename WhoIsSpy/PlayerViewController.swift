@@ -39,7 +39,7 @@ class PlayerViewController: UIViewController {
             roomId = roomIdField.text!
             if checkFieldsValid(){
                 spinner.startAnimating()
-                ifRoomExist()
+                allowedToEnter()
             }
         }
         return false
@@ -71,38 +71,42 @@ class PlayerViewController: UIViewController {
         sender.backgroundColor = .lightGray
     }
     
-    func ifRoomExist(){
+    func allowedToEnter(){
         //MARK: -
         //MARK: 1.如果有玩家的playerName取名為host，會有問題。待解決。
         //MARK: 2.應加入playerName檢查機制，確保沒有相同名稱的player。待解決。
 //                DocRef = gameRoomDB.document("\(roomId)/host")
         let docRef = gameRoomsDB.document("\(roomId)")
         docRef.getDocument { (document, error) in
-            if ((document?.exists) == true) {
-                print("✅ PlayerViewController.checkRoomExist(): Room Exists. Perform Segue!")
-                //TODO: 這種直接performSegue的作法可能不是很好，接下來待改進
-                //這邊如果用return true的方式，由於getDocument要耗時(async)
-                //在還沒取得firebase document之前，function就直接先return false了，
-                //所以永遠不會執行prepare() (永遠不會執行Segue)
-                self.performSegue(withIdentifier: "playerEnterRoom", sender: nil)
+            guard let document = document else {return}
+            if ((document.exists) == true) {
+                let data = document.data()?["host"] as! [String : Any]
+                let gameIsOnData = data["gameIsOn"] as! Bool
+                if !gameIsOnData{
+                    //TODO: 這種直接performSegue的作法可能不是很好，接下來待改進
+                    //這邊如果用return true的方式，由於getDocument要耗時(async)
+                    //在還沒取得firebase document之前，function就直接先return false了，
+                    //所以永遠不會執行prepare() (永遠不會執行Segue)
+                    print("✅ PlayerVC.allowedToEnter(): Room Exists.")
+                    self.performSegue(withIdentifier: "playerEnterRoom", sender: nil)
+                }else{
+                    print("⚠️ PlayerVC.allowedToEnter(): The game is in progress. The player shall wait.")
+                }
             }else{
-                print("⚠️ PlayerViewController.checkRoomExist(): room doesn't exist!")
+                print("⚠️ PlayerVC.allowedToEnter(): room doesn't exist!")
             }
             self.spinner.stopAnimating()
         }
     }
     
-    func checkFieldsValid() -> Bool{
-        print("playerNameField.text: \(playerName)")
-        print("roomIdField.text: \(roomId)")
-        
+    func checkFieldsValid() -> Bool{        
         if playerNameField.text != ""{
             if roomIdField.text != ""{
-                print("✅ PlayerViewController.checkFieldsValid(): Fields Valid.")
+                print("✅ PlayerVC.checkFieldsValid(): Fields Valid.")
                 return true
             }
-            else{ print("⚠️ PlayerViewController.checkFieldsValid(): roomIdField is Empty!")}
-        }else{ print("⚠️ PlayerViewController.checkFieldsValid(): playerNameField is Empty!")}
+            else{ print("⚠️ PlayerVC.checkFieldsValid(): roomIdField is Empty!")}
+        }else{ print("⚠️ PlayerVC.checkFieldsValid(): playerNameField is Empty!")}
 
         return false
     }

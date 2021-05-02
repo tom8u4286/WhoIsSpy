@@ -46,9 +46,7 @@ class PlayerRoomViewController: UIViewController {
             if let data = docSnapshot.data(){
                 if self.playerInRoom{
                     self.checkIfGameIsOn(data)
-//                    if !self.gameIsOn{
                         self.checkIfNewPlayerEnteredOrLeaved(data)
-//                    }
                 }
             }
         }
@@ -62,18 +60,16 @@ class PlayerRoomViewController: UIViewController {
         if difference.count != 0{
             //有新玩家進入遊戲間
             if newNameList.count - oldNameList.count > 0{
-                print("👏 PlayerRoomViewController: \(difference) entered this room!")
+                print("👏 PlayerRoomVC: \(difference) entered this room!")
                 for name in difference{
                     let dic = data[name] as! [String: Any]
                     let emoji = dic["emoji"] as! String
-                    print("\(name): \(emoji)")
-                    
                     self.playerList[name] = ["emoji": emoji]
                 }
             }
             //有玩家離開遊戲
             if oldNameList.count - newNameList.count > 0{
-                print("👋 PlayerRoomViewController: \(difference) leaved this room!")
+                print("👋 PlayerRoomVC: \(difference) leaved this room!")
                 for name in difference{
                     self.playerList.removeValue(forKey: name)
                 }
@@ -88,7 +84,7 @@ class PlayerRoomViewController: UIViewController {
     func checkIfGameIsOn(_ data: [String: Any]){
         if let hostData = data["host"] as? [String: Any]{
             if hostData["gameIsOn"]! as! Bool{
-                print("✅ PlayerRoomViewController.chekIfGameIsOn(): The game is on!")
+                print("✅ PlayerRoomVC.chekIfGameIsOn(): The game is on!")
                 gameIsOn = true
                 
                 let dic = data[self.playerName] as! [String: Any]
@@ -100,7 +96,7 @@ class PlayerRoomViewController: UIViewController {
                 self.hintLabel.isHidden = false
                 self.wordLabel.isHidden = false
             }else{
-                print("❌ PlayerRoomViewController.chekIfGameIsOn(): The game is off!")
+                print("❌ PlayerRoomVC.chekIfGameIsOn(): The game is off!")
                 gameIsOn = false
                 self.gameStatusLabel.isHidden = false
                 self.hintLabel.isHidden = true
@@ -111,7 +107,6 @@ class PlayerRoomViewController: UIViewController {
     }
     
     func redrawStackView(){
-        print("redrawStackView(): playerList: \(playerList)")
         for num in 0...(playerList.count-1)/5{
             let HStack = UIStackView()
             HStack.tag = num
