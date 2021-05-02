@@ -20,12 +20,7 @@ class PlayerViewController: UIViewController {
     var playerEmoji = "😃"
     var playerName = ""
     var roomId = ""
-    
-//    var playerDocRef: DocumentReference!
-//    var hostDocRef: DocumentReference!
-    
     var gameRoomsDB = Firestore.firestore().collection("GameRooms")
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,7 +39,6 @@ class PlayerViewController: UIViewController {
         }
         return false
     }
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier ==  "playerEnterRoom" {
             let controller = segue.destination as! PlayerRoomViewController
@@ -60,35 +54,39 @@ class PlayerViewController: UIViewController {
             sendData(to: gameRoomsDB.document("\(roomId)"), data, merge: true)
         }
     }
-    
-    //MARK: - functions
-    //MARK: -
-    
+
     @IBAction func emojiButtonAction(_ sender: UIButton) {
         playerEmoji = sender.title(for: .normal)!
         chooseYourEmojiLabel.text = "選擇你的Emoji: \(playerEmoji)"
         for button in EmojiButtonCollection{ button.backgroundColor = .none }
         sender.backgroundColor = .lightGray
     }
-    
     func allowedToEnter(){
-        //MARK: -
-        //MARK: 1.如果有玩家的playerName取名為host，會有問題。待解決。
-        //MARK: 2.應加入playerName檢查機制，確保沒有相同名稱的player。待解決。
-//                DocRef = gameRoomDB.document("\(roomId)/host")
+        //此allowedToEnter()檢查三件事 1.房間是否已存在 2.遊戲是否已經開始 3.使否有同名玩家
+        
         let docRef = gameRoomsDB.document("\(roomId)")
         docRef.getDocument { (document, error) in
             guard let document = document else {return}
+            
+            //1.檢查房間是否存在，即主持人是否已經開房
             if ((document.exists) == true) {
-                let data = document.data()?["host"] as! [String : Any]
-                let gameIsOnData = data["gameIsOn"] as! Bool
+                let hostData = document.data()?["host"] as! [String : Any]
+                //2.檢查遊戲是否已經開始，如果已經開始，則玩家不允許進入房間
+                let gameIsOnData = hostData["gameIsOn"] as! Bool
                 if !gameIsOnData{
-                    //TODO: 這種直接performSegue的作法可能不是很好，接下來待改進
-                    //這邊如果用return true的方式，由於getDocument要耗時(async)
-                    //在還沒取得firebase document之前，function就直接先return false了，
-                    //所以永遠不會執行prepare() (永遠不會執行Segue)
-                    print("✅ PlayerVC.allowedToEnter(): Room Exists.")
-                    self.performSegue(withIdentifier: "playerEnterRoom", sender: nil)
+                    
+                    //3.檢查是否有玩家名稱相同，如果已經有相同名稱者(包含host)，則玩家不允許進入房間
+                    let playerList = document.data()?.keys
+                    if !(playerList?.contains(self.playerName) ?? true){
+                        //TODO: 這種直接performSegue的作法可能不是很好，接下來待改進
+                        //這邊如果用return true的方式，由於getDocument要耗時(async)
+                        //在還沒取得firebase document之前，function就直接先return false了，
+                        //所以永遠不會執行prepare() (永遠不會執行Segue)
+                        print("✅ PlayerVC.allowedToEnter(): Room Exists.")
+                        self.performSegue(withIdentifier: "playerEnterRoom", sender: nil)
+                    }else{
+                        print("⚠️ PlayerVC.allowedToEnter(): Got same player name in room. Change a name to enter.")
+                    }
                 }else{
                     print("⚠️ PlayerVC.allowedToEnter(): The game is in progress. The player shall wait.")
                 }
@@ -99,15 +97,14 @@ class PlayerViewController: UIViewController {
         }
     }
     
-    func checkFieldsValid() -> Bool{        
+    func checkFieldsValid() -> Bool{
         if playerNameField.text != ""{
             if roomIdField.text != ""{
-                print("✅ PlayerVC.checkFieldsValid(): Fields Valid.")
+                print("✅ PlayerVC.checkFieldsValid(): Valid field.")
                 return true
             }
             else{ print("⚠️ PlayerVC.checkFieldsValid(): roomIdField is Empty!")}
         }else{ print("⚠️ PlayerVC.checkFieldsValid(): playerNameField is Empty!")}
-
         return false
     }
     
