@@ -24,16 +24,14 @@ class StartGameViewController: UIViewController, UIPickerViewDataSource, UIPicke
     var gameIsOn = false
     var citizenWord = ""
     var spyWord = ""
-    var playerNumber = 5
+    var playerNumber = 0
     var spyNumber = 1
-    
     var playerList = [String:[String:String]](){
         didSet{
             playerNumber = playerList.count - 1 //host不算
             playerNumberLabel.text = "\(playerNumber) 人"
         }
     }
-    
     var roomDocRef: DocumentReference!
     var docListener: ListenerRegistration!
     
@@ -41,6 +39,8 @@ class StartGameViewController: UIViewController, UIPickerViewDataSource, UIPicke
         super.viewDidLoad()
         roomId = title ?? "title is not set."
         roomDocRef = Firestore.firestore().document("GameRooms/\(roomId)")
+        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "結束遊戲", style: .plain, target: self,action: #selector(closeRoom))
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -48,9 +48,7 @@ class StartGameViewController: UIViewController, UIPickerViewDataSource, UIPicke
         docListener = roomDocRef.addSnapshotListener{ (docSnapshot, error) in
             guard let docSnapshot = docSnapshot, docSnapshot.exists else { return }
             if let data = docSnapshot.data(){
-//                if !self.gameIsOn{
                     self.checkIfNewPlayerEnteredOrLeaved(data)
-//                }
             }
         }
     }
@@ -127,8 +125,6 @@ class StartGameViewController: UIViewController, UIPickerViewDataSource, UIPicke
                 for name in difference{
                     let dic = data[name] as! [String: Any]
                     let emoji = dic["emoji"] as! String
-                    print("\(name): \(emoji)")
-                    
                     self.playerList[name] = ["emoji": emoji]
                 }
             }
@@ -143,7 +139,6 @@ class StartGameViewController: UIViewController, UIPickerViewDataSource, UIPicke
             outerVStack.removeAllArrangedSubviews()
             redrawStackView()
         }
-        
     }
     
     func redrawStackView(){
@@ -170,6 +165,24 @@ class StartGameViewController: UIViewController, UIPickerViewDataSource, UIPicke
             }
             index += 1
         }
+    }
+    
+    @objc func closeRoom(){
+        docListener.remove()
+        let dispatchQueue = DispatchQueue(label: "QueueIdentification", qos: .background)
+        dispatchQueue.async{
+            self.roomDocRef.updateData(["host": FieldValue.delete()])
+            DispatchQueue.main.async {
+                self.roomDocRef.delete()
+            }
+        }
+        roomId = ""
+        gameIsOn = false
+        citizenWord = ""
+        spyWord = ""
+        playerNumber = 0
+        spyNumber = 1
+        self.navigationController?.popViewController(animated: true)
     }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {

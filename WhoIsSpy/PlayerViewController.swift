@@ -82,7 +82,7 @@ class PlayerViewController: UIViewController {
                         //這邊如果用return true的方式，由於getDocument要耗時(async)
                         //在還沒取得firebase document之前，function就直接先return false了，
                         //所以永遠不會執行prepare() (永遠不會執行Segue)
-                        print("✅ PlayerVC.allowedToEnter(): Room Exists.")
+                        print("✅ PlayerVC.allowedToEnter(): Allowed to enter the room.")
                         self.performSegue(withIdentifier: "playerEnterRoom", sender: nil)
                     }else{
                         print("⚠️ PlayerVC.allowedToEnter(): Got same player name in room. Change a name to enter.")

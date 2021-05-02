@@ -53,6 +53,8 @@ class PlayerRoomViewController: UIViewController {
     }
     
     func checkIfNewPlayerEnteredOrLeaved(_ data: [String: Any]){
+        //此function檢查是否有玩家進入房間或是離開房間，若有，要重畫Emoji圖
+        //同時，如果發現離開的是host，則表示遊戲式被關閉，主動segue回PlayerVC
         let newNameList = Array(data.keys)
         let oldNameList = Array(self.playerList.keys)
         let difference = newNameList.difference(from: oldNameList)
@@ -70,6 +72,11 @@ class PlayerRoomViewController: UIViewController {
             //有玩家離開遊戲
             if oldNameList.count - newNameList.count > 0{
                 print("👋 PlayerRoomVC: \(difference) leaved this room!")
+                if difference.contains("host"){
+                    print("👋PlayerRoomVC: host closed the room.")
+                    leaveRoom()
+                    return
+                }
                 for name in difference{
                     self.playerList.removeValue(forKey: name)
                 }
