@@ -14,12 +14,22 @@ class PlayerViewController: UIViewController {
     @IBOutlet var roomIdField: UITextField!
     @IBOutlet var spinner: UIActivityIndicatorView!
     @IBOutlet var chooseYourEmojiLabel: UILabel!
+    
+    
     @IBOutlet var EmojiButtonCollection: [UIButton]!
+    
+    
+    
     @IBOutlet var enterButton: UIButton!
     @IBOutlet var sameNameHintLabel: UILabel!
     @IBOutlet var roomNotExistHintLabel: UILabel!
+    @IBOutlet var playerEmojiLabel: UILabel!
     
-    var playerEmoji = "😃"
+    var playerEmoji = "😃"{
+        didSet{
+            playerEmojiLabel.text = playerEmoji
+        }
+    }
     var playerName = ""
     var roomId = ""
     var gameRoomsDB = Firestore.firestore().collection("GameRooms")
@@ -59,7 +69,6 @@ class PlayerViewController: UIViewController {
 
     @IBAction func emojiButtonAction(_ sender: UIButton) {
         playerEmoji = sender.title(for: .normal)!
-        chooseYourEmojiLabel.text = "選擇你的Emoji: \(playerEmoji)"
         for button in EmojiButtonCollection{ button.backgroundColor = .none }
         sender.backgroundColor = .lightGray
     }
@@ -95,7 +104,9 @@ class PlayerViewController: UIViewController {
                         print("⚠️ PlayerVC.allowedToEnter(): Got same player name in room. Change a name to enter.")
                     }
                 }else{
-                    //TODO: 要加入Alert
+                    let ac = UIAlertController(title: "遊戲進行中", message: "暫時無法進入房間，請稍後！", preferredStyle: .alert)
+                    ac.addAction(UIAlertAction(title: "確定", style: .default, handler: {_ in }))
+                    self.present(ac, animated: true)
                     print("⚠️ PlayerVC.allowedToEnter(): The game is in progress. The player shall wait.")
                 }
             }else{

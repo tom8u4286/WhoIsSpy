@@ -258,7 +258,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="遊戲室ID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1eb-3h-jjp">
-                                <rect key="frame" x="57" y="225.5" width="300" height="33.5"/>
+                                <rect key="frame" x="57" y="205.5" width="300" height="33.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="0GM-CN-KSU"/>
                                 </constraints>
@@ -277,7 +277,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="p7k-Ec-5FD">
-                                <rect key="frame" x="57" y="269" width="300" height="34"/>
+                                <rect key="frame" x="57" y="249" width="300" height="34"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="vBN-qk-9ss"/>
@@ -287,7 +287,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qid-hg-MWv">
-                                <rect key="frame" x="57" y="551.5" width="300" height="50"/>
+                                <rect key="frame" x="57" y="610.5" width="300" height="50"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="9ie-gM-6w6"/>
@@ -305,11 +305,8 @@
                                     <segue destination="eE5-UH-Ivc" kind="show" identifier="playerEnterRoom" id="c9g-5l-Xlc"/>
                                 </connections>
                             </button>
-                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="x4u-ig-6Rj">
-                                <rect key="frame" x="197" y="511.5" width="20" height="20"/>
-                            </activityIndicatorView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="選擇你的Emoji: 😃" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2hm-1L-ic8">
-                                <rect key="frame" x="57" y="333" width="300" height="33.5"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="選擇你的Emoji: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2hm-1L-ic8">
+                                <rect key="frame" x="57" y="293" width="300" height="33.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="uzU-9l-ztn"/>
                                 </constraints>
@@ -317,8 +314,11 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="x4u-ig-6Rj">
+                                <rect key="frame" x="197" y="550.5" width="20" height="20"/>
+                            </activityIndicatorView>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="Kaz-Cp-jwO">
-                                <rect key="frame" x="57" y="376.5" width="300" height="60"/>
+                                <rect key="frame" x="57" y="420.5" width="300" height="60"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="093-j2-xxO">
                                         <rect key="frame" x="0.0" y="0.0" width="43" height="60"/>
@@ -418,7 +418,7 @@
                                 </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="8ah-hM-TCu">
-                                <rect key="frame" x="57" y="441.5" width="300" height="60"/>
+                                <rect key="frame" x="57" y="480.5" width="300" height="60"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OWY-QZ-568">
                                         <rect key="frame" x="0.0" y="0.0" width="43" height="60"/>
@@ -517,6 +517,71 @@
                                     <constraint firstAttribute="width" constant="300" id="Jze-uQ-NwB"/>
                                 </constraints>
                             </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="zlZ-qd-YRq">
+                                <rect key="frame" x="57" y="540.5" width="300" height="60"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MYs-xK-7Wo">
+                                        <rect key="frame" x="0.0" y="0.0" width="43" height="60"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                        <state key="normal" title="🐶"/>
+                                        <connections>
+                                            <action selector="emojiButtonAction:" destination="fEQ-vf-SRT" eventType="touchUpInside" id="Sdp-Bx-ekw"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Ll-rW-RlS">
+                                        <rect key="frame" x="43" y="0.0" width="42.5" height="60"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                        <state key="normal" title="🐭"/>
+                                        <connections>
+                                            <action selector="emojiButtonAction:" destination="fEQ-vf-SRT" eventType="touchUpInside" id="Sy2-FF-HEk"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uPM-lh-8nL">
+                                        <rect key="frame" x="85.5" y="0.0" width="43" height="60"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                        <state key="normal" title="🐹"/>
+                                        <connections>
+                                            <action selector="emojiButtonAction:" destination="fEQ-vf-SRT" eventType="touchUpInside" id="pAz-TN-fqQ"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LhQ-nH-JUN">
+                                        <rect key="frame" x="128.5" y="0.0" width="43" height="60"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                        <state key="normal" title="🦊"/>
+                                        <connections>
+                                            <action selector="emojiButtonAction:" destination="fEQ-vf-SRT" eventType="touchUpInside" id="jE0-o5-C4X"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D9r-fK-hep">
+                                        <rect key="frame" x="171.5" y="0.0" width="43" height="60"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                        <state key="normal" title="🐯"/>
+                                        <connections>
+                                            <action selector="emojiButtonAction:" destination="fEQ-vf-SRT" eventType="touchUpInside" id="bga-Wi-XaC"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aM6-On-H2x">
+                                        <rect key="frame" x="214.5" y="0.0" width="42.5" height="60"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                        <state key="normal" title="🦁"/>
+                                        <connections>
+                                            <action selector="emojiButtonAction:" destination="fEQ-vf-SRT" eventType="touchUpInside" id="dJq-2j-Nxs"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lnl-8O-yp2">
+                                        <rect key="frame" x="257" y="0.0" width="43" height="60"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                        <state key="normal" title="🐮"/>
+                                        <connections>
+                                            <action selector="emojiButtonAction:" destination="fEQ-vf-SRT" eventType="touchUpInside" id="0Jq-ox-XVl"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="FVV-i3-BJA"/>
+                                    <constraint firstAttribute="width" constant="300" id="ld9-QF-TUA"/>
+                                </constraints>
+                            </stackView>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="⚠️已有同名玩家" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y5T-aq-gst">
                                 <rect key="frame" x="193.5" y="124.5" width="127" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -524,34 +589,44 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="⚠️無此遊戲室" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ad7-eo-csR">
-                                <rect key="frame" x="202" y="232" width="110" height="20.5"/>
+                                <rect key="frame" x="202" y="212" width="110" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="1" green="0.68235294120000001" blue="0.72549019609999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="😃" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qDH-fR-22p">
+                                <rect key="frame" x="169.5" y="336.5" width="75" height="84"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="70"/>
+                                <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="x9T-KX-044"/>
                         <color key="backgroundColor" red="0.17250087859999999" green="0.17241308089999999" blue="0.18068075180000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="Qid-hg-MWv" firstAttribute="top" secondItem="x4u-ig-6Rj" secondAttribute="bottom" constant="20" id="1cF-ob-5er"/>
-                            <constraint firstItem="8ah-hM-TCu" firstAttribute="top" secondItem="Kaz-Cp-jwO" secondAttribute="bottom" constant="5" id="ExV-NM-DL2"/>
+                            <constraint firstItem="zlZ-qd-YRq" firstAttribute="top" secondItem="8ah-hM-TCu" secondAttribute="bottom" id="6Al-92-VTq"/>
+                            <constraint firstItem="Kaz-Cp-jwO" firstAttribute="top" secondItem="qDH-fR-22p" secondAttribute="bottom" id="7jm-q7-dTN"/>
+                            <constraint firstItem="8ah-hM-TCu" firstAttribute="top" secondItem="Kaz-Cp-jwO" secondAttribute="bottom" id="ExV-NM-DL2"/>
                             <constraint firstItem="x4u-ig-6Rj" firstAttribute="centerX" secondItem="p7k-Ec-5FD" secondAttribute="centerX" id="IUh-9e-eqo"/>
                             <constraint firstItem="Ad7-eo-csR" firstAttribute="centerX" secondItem="x9T-KX-044" secondAttribute="centerX" constant="50" id="KBK-FZ-weo"/>
                             <constraint firstItem="Y5T-aq-gst" firstAttribute="centerY" secondItem="Iex-w7-Lng" secondAttribute="centerY" id="KrW-22-CfV"/>
+                            <constraint firstItem="qDH-fR-22p" firstAttribute="centerX" secondItem="x9T-KX-044" secondAttribute="centerX" id="SG7-ja-0G4"/>
                             <constraint firstItem="Iex-w7-Lng" firstAttribute="top" secondItem="x9T-KX-044" secondAttribute="top" constant="30" id="UPw-KU-Ifb"/>
                             <constraint firstItem="2hm-1L-ic8" firstAttribute="centerX" secondItem="x9T-KX-044" secondAttribute="centerX" id="US8-IX-JAO"/>
+                            <constraint firstItem="Qid-hg-MWv" firstAttribute="top" secondItem="zlZ-qd-YRq" secondAttribute="bottom" constant="10" id="VCC-Zc-ejo"/>
                             <constraint firstItem="Qid-hg-MWv" firstAttribute="centerX" secondItem="x9T-KX-044" secondAttribute="centerX" id="X7Q-jB-v1B"/>
                             <constraint firstItem="2eJ-aZ-mTI" firstAttribute="top" secondItem="Iex-w7-Lng" secondAttribute="bottom" constant="10" id="Xtk-cg-Glg"/>
+                            <constraint firstItem="zlZ-qd-YRq" firstAttribute="centerX" secondItem="x9T-KX-044" secondAttribute="centerX" id="YC5-g4-Dsu"/>
                             <constraint firstItem="x4u-ig-6Rj" firstAttribute="top" secondItem="8ah-hM-TCu" secondAttribute="bottom" constant="10" id="eBB-Wx-NOZ"/>
-                            <constraint firstItem="1eb-3h-jjp" firstAttribute="top" secondItem="2eJ-aZ-mTI" secondAttribute="bottom" constant="30" id="f39-C5-9eI"/>
+                            <constraint firstItem="1eb-3h-jjp" firstAttribute="top" secondItem="2eJ-aZ-mTI" secondAttribute="bottom" constant="10" id="f39-C5-9eI"/>
                             <constraint firstItem="Y5T-aq-gst" firstAttribute="centerX" secondItem="x9T-KX-044" secondAttribute="centerX" constant="50" id="h1E-74-YAy"/>
+                            <constraint firstItem="qDH-fR-22p" firstAttribute="top" secondItem="2hm-1L-ic8" secondAttribute="bottom" constant="10" id="jAv-Pp-Fqo"/>
                             <constraint firstItem="Ad7-eo-csR" firstAttribute="centerY" secondItem="1eb-3h-jjp" secondAttribute="centerY" id="l3l-ks-B5V"/>
                             <constraint firstItem="p7k-Ec-5FD" firstAttribute="top" secondItem="1eb-3h-jjp" secondAttribute="bottom" constant="10" id="l4x-6L-E76"/>
                             <constraint firstItem="Kaz-Cp-jwO" firstAttribute="centerX" secondItem="x9T-KX-044" secondAttribute="centerX" id="lJx-UQ-WdE"/>
-                            <constraint firstItem="Kaz-Cp-jwO" firstAttribute="top" secondItem="2hm-1L-ic8" secondAttribute="bottom" constant="10" id="oU9-SR-Fpa"/>
                             <constraint firstItem="Iex-w7-Lng" firstAttribute="centerX" secondItem="x9T-KX-044" secondAttribute="centerX" id="pW6-go-BXi"/>
                             <constraint firstItem="1eb-3h-jjp" firstAttribute="centerX" secondItem="x9T-KX-044" secondAttribute="centerX" id="qFT-4N-iUO"/>
-                            <constraint firstItem="2hm-1L-ic8" firstAttribute="top" secondItem="p7k-Ec-5FD" secondAttribute="bottom" constant="30" id="rGo-Et-pC7"/>
+                            <constraint firstItem="2hm-1L-ic8" firstAttribute="top" secondItem="p7k-Ec-5FD" secondAttribute="bottom" constant="10" id="rGo-Et-pC7"/>
                             <constraint firstItem="p7k-Ec-5FD" firstAttribute="centerX" secondItem="x9T-KX-044" secondAttribute="centerX" id="xrx-YZ-Km8"/>
                             <constraint firstItem="2eJ-aZ-mTI" firstAttribute="centerX" secondItem="x9T-KX-044" secondAttribute="centerX" id="xzf-Km-Zem"/>
                             <constraint firstItem="8ah-hM-TCu" firstAttribute="centerX" secondItem="x9T-KX-044" secondAttribute="centerX" id="ya6-1a-zmE"/>
@@ -561,6 +636,7 @@
                     <connections>
                         <outlet property="chooseYourEmojiLabel" destination="2hm-1L-ic8" id="M9W-1N-Ix1"/>
                         <outlet property="enterButton" destination="Qid-hg-MWv" id="Y2v-Gn-fJu"/>
+                        <outlet property="playerEmojiLabel" destination="qDH-fR-22p" id="hH3-mR-VSO"/>
                         <outlet property="playerNameField" destination="2eJ-aZ-mTI" id="HZO-f0-8UA"/>
                         <outlet property="roomIdField" destination="p7k-Ec-5FD" id="Nhe-gG-Ug7"/>
                         <outlet property="roomNotExistHintLabel" destination="Ad7-eo-csR" id="LwP-3S-7j6"/>
@@ -587,6 +663,13 @@
                         <outletCollection property="EmojiButtonCollection" destination="U39-kD-TtA" collectionClass="NSMutableArray" id="ODJ-V6-znV"/>
                         <outletCollection property="EmojiButtonCollection" destination="RiW-4N-fsU" collectionClass="NSMutableArray" id="o87-cA-AEN"/>
                         <outletCollection property="EmojiButtonCollection" destination="Esu-mS-fIu" collectionClass="NSMutableArray" id="wh5-82-hsD"/>
+                        <outletCollection property="EmojiButtonCollection" destination="MYs-xK-7Wo" collectionClass="NSMutableArray" id="zu4-ns-bXy"/>
+                        <outletCollection property="EmojiButtonCollection" destination="4Ll-rW-RlS" collectionClass="NSMutableArray" id="Dsy-PF-o3l"/>
+                        <outletCollection property="EmojiButtonCollection" destination="uPM-lh-8nL" collectionClass="NSMutableArray" id="CtH-lV-SdU"/>
+                        <outletCollection property="EmojiButtonCollection" destination="LhQ-nH-JUN" collectionClass="NSMutableArray" id="cj7-L9-r9P"/>
+                        <outletCollection property="EmojiButtonCollection" destination="D9r-fK-hep" collectionClass="NSMutableArray" id="SV5-Os-OQw"/>
+                        <outletCollection property="EmojiButtonCollection" destination="aM6-On-H2x" collectionClass="NSMutableArray" id="yCr-PA-gnY"/>
+                        <outletCollection property="EmojiButtonCollection" destination="lnl-8O-yp2" collectionClass="NSMutableArray" id="VjC-7e-4Qd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uk9-T7-KBS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
