@@ -72,9 +72,11 @@ class PlayerRoomViewController: UIViewController {
             //有玩家離開遊戲
             if oldNameList.count - newNameList.count > 0{
                 print("👋 PlayerRoomVC: \(difference) leaved this room!")
+                //如果發現離開的是host，則表示遊戲式被關閉，主動segue回PlayerVC
                 if difference.contains("host"){
-                    print("👋PlayerRoomVC: host closed the room.")
-                    leaveRoom()
+                    let ac = UIAlertController(title: "遊戲結束", message: "主持人已關閉遊戲室", preferredStyle: .alert)
+                    ac.addAction(UIAlertAction(title: "確定", style: .default, handler: {_ in self.leaveRoom()}))
+                    present(ac, animated: true)
                     return
                 }
                 for name in difference{

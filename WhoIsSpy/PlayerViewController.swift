@@ -16,6 +16,8 @@ class PlayerViewController: UIViewController {
     @IBOutlet var chooseYourEmojiLabel: UILabel!
     @IBOutlet var EmojiButtonCollection: [UIButton]!
     @IBOutlet var enterButton: UIButton!
+    @IBOutlet var sameNameHintLabel: UILabel!
+    @IBOutlet var roomNotExistHintLabel: UILabel!
     
     var playerEmoji = "😃"
     var playerName = ""
@@ -63,6 +65,8 @@ class PlayerViewController: UIViewController {
     }
     func allowedToEnter(){
         //此allowedToEnter()檢查三件事 1.房間是否已存在 2.遊戲是否已經開始 3.使否有同名玩家
+        self.sameNameHintLabel.isHidden = true
+        self.roomNotExistHintLabel.isHidden = true
         
         let docRef = gameRoomsDB.document("\(roomId)")
         docRef.getDocument { (document, error) in
@@ -83,14 +87,20 @@ class PlayerViewController: UIViewController {
                         //在還沒取得firebase document之前，function就直接先return false了，
                         //所以永遠不會執行prepare() (永遠不會執行Segue)
                         print("✅ PlayerVC.allowedToEnter(): Allowed to enter the room.")
+                        
                         self.performSegue(withIdentifier: "playerEnterRoom", sender: nil)
                     }else{
+                        self.errorAnimation(field: self.playerNameField)
+                        self.sameNameHintLabel.isHidden = false
                         print("⚠️ PlayerVC.allowedToEnter(): Got same player name in room. Change a name to enter.")
                     }
                 }else{
+                    //TODO: 要加入Alert
                     print("⚠️ PlayerVC.allowedToEnter(): The game is in progress. The player shall wait.")
                 }
             }else{
+                self.roomNotExistHintLabel.isHidden = false
+                self.errorAnimation(field: self.roomIdField)
                 print("⚠️ PlayerVC.allowedToEnter(): room doesn't exist!")
             }
             self.spinner.stopAnimating()
@@ -98,14 +108,15 @@ class PlayerViewController: UIViewController {
     }
     
     func checkFieldsValid() -> Bool{
-        if playerNameField.text != ""{
-            if roomIdField.text != ""{
-                print("✅ PlayerVC.checkFieldsValid(): Valid field.")
-                return true
-            }
-            else{ print("⚠️ PlayerVC.checkFieldsValid(): roomIdField is Empty!")}
-        }else{ print("⚠️ PlayerVC.checkFieldsValid(): playerNameField is Empty!")}
+        if playerNameField.text == ""{ errorAnimation(field: playerNameField)}
+        if roomIdField.text == ""{ errorAnimation(field: roomIdField)}
+        if playerNameField.text != "" && roomIdField.text != ""{ return true }
         return false
+    }
+    
+    func errorAnimation(field: UIView){
+        field.backgroundColor = UIColor(red: 255/255, green: 174/255, blue: 185/255, alpha: 1)
+        UIView.animate(withDuration: 3){ field.backgroundColor = .white }
     }
     
     func sendData(to docRef: DocumentReference, _ data: [String: Any], merge: Bool){

@@ -86,7 +86,6 @@ class StartGameViewController: UIViewController, UIPickerViewDataSource, UIPicke
             //設定所有玩家的題目
             for spy in spyList{ roomDocRef.updateData(["\(spy).word": spyWord])}
             for citizen in citizensList{ roomDocRef.updateData(["\(citizen).word": citizenWord])}
-            
             docListener.remove()
         }
         
@@ -101,14 +100,18 @@ class StartGameViewController: UIViewController, UIPickerViewDataSource, UIPicke
     }
     
     func checkFieldsValid() -> Bool{
-        if citizenWordField.text != ""{
-            if spyWordField.text != ""{
-                if spyNumber < playerNumber{ return true } else { print("⚠️ Too many spy!")}
-            }else{
-                print("⚠️ Spy word is nil!")
-            }
-        }else{
-            print("⚠️ Citizen word is nil!")
+        //Animation of textFields
+        if citizenWordField.text == ""{
+            citizenWordField.backgroundColor = UIColor(red: 255/255, green: 174/255, blue: 185/255, alpha: 1)
+            UIView.animate(withDuration: 3){ self.citizenWordField.backgroundColor = .white }
+        }
+        if spyWordField.text == ""{
+            spyWordField.backgroundColor = UIColor(red: 255/255, green: 174/255, blue: 185/255, alpha: 1)
+            UIView.animate(withDuration: 3){ self.spyWordField.backgroundColor = .white }
+        }
+        
+        if citizenWordField.text != "" && spyWordField.text != ""{
+            if spyNumber < playerNumber{ return true }
         }
         return false
     }
@@ -168,6 +171,7 @@ class StartGameViewController: UIViewController, UIPickerViewDataSource, UIPicke
     }
     
     @objc func closeRoom(){
+        print("👋 StartGameVC.closeRoom(): You have closed this room!")
         docListener.remove()
         let dispatchQueue = DispatchQueue(label: "QueueIdentification", qos: .background)
         dispatchQueue.async{

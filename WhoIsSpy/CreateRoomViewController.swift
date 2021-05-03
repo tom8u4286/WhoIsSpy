@@ -20,11 +20,7 @@ class CreateRoomViewController: UIViewController {
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool{
         if identifier == "createRoomSegue"{
-            if roomIdField.text != ""{
-                return true
-            }else{
-                print("⚠️ shouldPerformSegue(): roomIdField is Empty!")
-            }
+            if checkFieldsValid(){ return true }
         }
         return false
     }
@@ -40,6 +36,15 @@ class CreateRoomViewController: UIViewController {
             let controller = segue.destination as! StartGameViewController
             controller.title = roomId
         }
+    }
+    
+    func checkFieldsValid() -> Bool{
+        if roomIdField.text == ""{
+            roomIdField.backgroundColor = UIColor(red: 255/255, green: 174/255, blue: 185/255, alpha: 1)
+            UIView.animate(withDuration: 3){ self.roomIdField.backgroundColor = .white }
+            return false
+        }
+        return true
     }
     
     func sendData(to docRef: DocumentReference, _ data: [String: Any]){

@@ -24,7 +24,7 @@
                                 </constraints>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <state key="normal" title="我是玩家"/>
+                                <state key="normal" title="進入遊戲"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                         <integer key="value" value="5"/>
@@ -43,7 +43,7 @@
                                 </constraints>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <state key="normal" title="我是主持人"/>
+                                <state key="normal" title="建立遊戲"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                         <integer key="value" value="5"/>
@@ -517,6 +517,18 @@
                                     <constraint firstAttribute="width" constant="300" id="Jze-uQ-NwB"/>
                                 </constraints>
                             </stackView>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="⚠️已有同名玩家" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y5T-aq-gst">
+                                <rect key="frame" x="193.5" y="124.5" width="127" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="0.68235294117647061" blue="0.72549019607843135" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="⚠️無此遊戲室" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ad7-eo-csR">
+                                <rect key="frame" x="202" y="232" width="110" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="0.68235294120000001" blue="0.72549019609999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="x9T-KX-044"/>
                         <color key="backgroundColor" red="0.17250087859999999" green="0.17241308089999999" blue="0.18068075180000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -524,12 +536,16 @@
                             <constraint firstItem="Qid-hg-MWv" firstAttribute="top" secondItem="x4u-ig-6Rj" secondAttribute="bottom" constant="20" id="1cF-ob-5er"/>
                             <constraint firstItem="8ah-hM-TCu" firstAttribute="top" secondItem="Kaz-Cp-jwO" secondAttribute="bottom" constant="5" id="ExV-NM-DL2"/>
                             <constraint firstItem="x4u-ig-6Rj" firstAttribute="centerX" secondItem="p7k-Ec-5FD" secondAttribute="centerX" id="IUh-9e-eqo"/>
+                            <constraint firstItem="Ad7-eo-csR" firstAttribute="centerX" secondItem="x9T-KX-044" secondAttribute="centerX" constant="50" id="KBK-FZ-weo"/>
+                            <constraint firstItem="Y5T-aq-gst" firstAttribute="centerY" secondItem="Iex-w7-Lng" secondAttribute="centerY" id="KrW-22-CfV"/>
                             <constraint firstItem="Iex-w7-Lng" firstAttribute="top" secondItem="x9T-KX-044" secondAttribute="top" constant="30" id="UPw-KU-Ifb"/>
                             <constraint firstItem="2hm-1L-ic8" firstAttribute="centerX" secondItem="x9T-KX-044" secondAttribute="centerX" id="US8-IX-JAO"/>
                             <constraint firstItem="Qid-hg-MWv" firstAttribute="centerX" secondItem="x9T-KX-044" secondAttribute="centerX" id="X7Q-jB-v1B"/>
                             <constraint firstItem="2eJ-aZ-mTI" firstAttribute="top" secondItem="Iex-w7-Lng" secondAttribute="bottom" constant="10" id="Xtk-cg-Glg"/>
                             <constraint firstItem="x4u-ig-6Rj" firstAttribute="top" secondItem="8ah-hM-TCu" secondAttribute="bottom" constant="10" id="eBB-Wx-NOZ"/>
                             <constraint firstItem="1eb-3h-jjp" firstAttribute="top" secondItem="2eJ-aZ-mTI" secondAttribute="bottom" constant="30" id="f39-C5-9eI"/>
+                            <constraint firstItem="Y5T-aq-gst" firstAttribute="centerX" secondItem="x9T-KX-044" secondAttribute="centerX" constant="50" id="h1E-74-YAy"/>
+                            <constraint firstItem="Ad7-eo-csR" firstAttribute="centerY" secondItem="1eb-3h-jjp" secondAttribute="centerY" id="l3l-ks-B5V"/>
                             <constraint firstItem="p7k-Ec-5FD" firstAttribute="top" secondItem="1eb-3h-jjp" secondAttribute="bottom" constant="10" id="l4x-6L-E76"/>
                             <constraint firstItem="Kaz-Cp-jwO" firstAttribute="centerX" secondItem="x9T-KX-044" secondAttribute="centerX" id="lJx-UQ-WdE"/>
                             <constraint firstItem="Kaz-Cp-jwO" firstAttribute="top" secondItem="2hm-1L-ic8" secondAttribute="bottom" constant="10" id="oU9-SR-Fpa"/>
@@ -547,6 +563,8 @@
                         <outlet property="enterButton" destination="Qid-hg-MWv" id="Y2v-Gn-fJu"/>
                         <outlet property="playerNameField" destination="2eJ-aZ-mTI" id="HZO-f0-8UA"/>
                         <outlet property="roomIdField" destination="p7k-Ec-5FD" id="Nhe-gG-Ug7"/>
+                        <outlet property="roomNotExistHintLabel" destination="Ad7-eo-csR" id="LwP-3S-7j6"/>
+                        <outlet property="sameNameHintLabel" destination="Y5T-aq-gst" id="AeZ-Vi-iPX"/>
                         <outlet property="spinner" destination="x4u-ig-6Rj" id="TeZ-p9-j2O"/>
                         <outletCollection property="emojiButtonCollection" destination="093-j2-xxO" collectionClass="NSMutableArray" id="j2j-Ny-qz6"/>
                         <outletCollection property="emojiButtonCollection" destination="oUQ-Rv-hTt" collectionClass="NSMutableArray" id="X6g-nc-0gQ"/>
