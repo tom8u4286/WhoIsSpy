@@ -8,7 +8,7 @@
 import UIKit
 import Firebase
 
-class StartGameViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
+class StartGameViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextFieldDelegate{
     
     let numberList = ["1人","2人","3人","4人","5人"]
     @IBOutlet var pickerView: UIPickerView!
@@ -16,7 +16,7 @@ class StartGameViewController: UIViewController, UIPickerViewDataSource, UIPicke
     @IBOutlet var citizenWordField: UITextField!
     @IBOutlet var spyWordField: UITextField!
     @IBOutlet var playerNumberLabel: UILabel!
-    
+    @IBOutlet var tooManySpyHintLabel: UILabel!
     
     @IBOutlet var outerVStack: UIStackView!
     
@@ -41,6 +41,8 @@ class StartGameViewController: UIViewController, UIPickerViewDataSource, UIPicke
         roomDocRef = Firestore.firestore().document("GameRooms/\(roomId)")
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "結束遊戲", style: .plain, target: self,action: #selector(closeRoom))
+        self.citizenWordField.delegate = self
+        self.spyWordField.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -48,7 +50,7 @@ class StartGameViewController: UIViewController, UIPickerViewDataSource, UIPicke
         docListener = roomDocRef.addSnapshotListener{ (docSnapshot, error) in
             guard let docSnapshot = docSnapshot, docSnapshot.exists else { return }
             if let data = docSnapshot.data(){
-                    self.checkIfNewPlayerEnteredOrLeaved(data)
+                self.checkIfNewPlayerEnteredOrLeaved(data)
             }
         }
     }
@@ -88,7 +90,6 @@ class StartGameViewController: UIViewController, UIPickerViewDataSource, UIPicke
             for citizen in citizensList{ roomDocRef.updateData(["\(citizen).word": citizenWord])}
             docListener.remove()
         }
-        
     }
     
     func chooseSpies() -> ([String], [String]){
@@ -109,9 +110,14 @@ class StartGameViewController: UIViewController, UIPickerViewDataSource, UIPicke
             spyWordField.backgroundColor = UIColor(red: 255/255, green: 174/255, blue: 185/255, alpha: 1)
             UIView.animate(withDuration: 3){ self.spyWordField.backgroundColor = .white }
         }
-        
         if citizenWordField.text != "" && spyWordField.text != ""{
-            if spyNumber < playerNumber{ return true }
+            if spyNumber < playerNumber{
+                tooManySpyHintLabel.isHidden = true
+                return true
+            }
+            else{
+                tooManySpyHintLabel.isHidden = false
+            }
         }
         return false
     }
@@ -145,7 +151,7 @@ class StartGameViewController: UIViewController, UIPickerViewDataSource, UIPicke
     }
     
     func redrawStackView(){
-        for num in 0...(playerList.count-1)/5{
+        for num in 0...(playerList.count-1)/6{
             let HStack = UIStackView()
             HStack.tag = num
             HStack.axis  = .horizontal
@@ -156,10 +162,16 @@ class StartGameViewController: UIViewController, UIPickerViewDataSource, UIPicke
         }
         var index = 0
         for (name, dic) in playerList{
-            if let assignedStack = outerVStack.viewWithTag(index/5) as? UIStackView{
+            if let assignedStack = outerVStack.viewWithTag(index/6) as? UIStackView{
                 let emoji = dic["emoji"] ?? "No emoji got."
+                
                 let attributedText = NSMutableAttributedString(string: "\(emoji)\n", attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .largeTitle)])
-                attributedText.append(NSAttributedString(string: "\(name)", attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .title2)]))
+                let attributes: [NSAttributedString.Key: Any] = [
+                    .font: UIFont.preferredFont(forTextStyle: .title2),
+                    .foregroundColor: UIColor.black,
+                ]
+                attributedText.append(NSAttributedString(string: "\(name)", attributes:attributes))
+                
                 let label = UILabel()
                 label.attributedText = attributedText
                 label.numberOfLines = 2
@@ -208,6 +220,16 @@ class StartGameViewController: UIViewController, UIPickerViewDataSource, UIPicke
                 print("⚠️ Got an error sending data: \(error.localizedDescription)")
             }
         }
+    }
+    
+    //Hide keyboard when ended editing
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        citizenWordField.resignFirstResponder()
+        spyWordField.resignFirstResponder()
+        return true
     }
 }
 

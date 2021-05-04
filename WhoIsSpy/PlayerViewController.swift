@@ -8,7 +8,7 @@
 import UIKit
 import Firebase
 
-class PlayerViewController: UIViewController {
+class PlayerViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet var playerNameField: UITextField!
     @IBOutlet var roomIdField: UITextField!
@@ -38,14 +38,18 @@ class PlayerViewController: UIViewController {
         super.viewDidLoad()
         title = "玩家"
         navigationController?.setNavigationBarHidden(false, animated: true)
+        
+        self.playerNameField.delegate = self
+        self.roomIdField.delegate = self
     }
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         if identifier == "playerEnterRoom"{
             playerName = playerNameField.text!
             roomId = roomIdField.text!
-            if checkFieldsValid(){
+            if checkFieldsNotEmpty(){
                 spinner.startAnimating()
+                enterButton.isEnabled = false
                 allowedToEnter()
             }
         }
@@ -115,10 +119,11 @@ class PlayerViewController: UIViewController {
                 print("⚠️ PlayerVC.allowedToEnter(): room doesn't exist!")
             }
             self.spinner.stopAnimating()
+            self.enterButton.isEnabled = true
         }
     }
     
-    func checkFieldsValid() -> Bool{
+    func checkFieldsNotEmpty() -> Bool{
         if playerNameField.text == ""{ errorAnimation(field: playerNameField)}
         if roomIdField.text == ""{ errorAnimation(field: roomIdField)}
         if playerNameField.text != "" && roomIdField.text != ""{ return true }
@@ -136,5 +141,15 @@ class PlayerViewController: UIViewController {
                 print("⚠️ PlayerViewController.sendData(): Got an error sending data: \(error.localizedDescription)")
             }
         }
+    }
+    
+    //Hide keyboard when ended editing
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        roomIdField.resignFirstResponder()
+        playerNameField.resignFirstResponder()
+        return true
     }
 }

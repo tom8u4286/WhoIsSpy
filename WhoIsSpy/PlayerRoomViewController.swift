@@ -32,7 +32,7 @@ class PlayerRoomViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         playerInRoom = true
-        playerNameLabel.text = playerEmoji + playerName
+        playerNameLabel.attributedText = attributedPlayerNameLable()
         roomId = title!
         roomDocRef = Firestore.firestore().document("GameRooms/\(roomId)")
         
@@ -114,9 +114,15 @@ class PlayerRoomViewController: UIViewController {
             }
         }
     }
+    func attributedPlayerNameLable() -> NSMutableAttributedString{
+        let attributedText = NSMutableAttributedString(string: "\(playerEmoji)", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 70)])
+        attributedText.append(NSAttributedString(string: "\(playerName)", attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .largeTitle)]))
+        return attributedText
+    }
+    
     
     func redrawStackView(){
-        for num in 0...(playerList.count-1)/5{
+        for num in 0...(playerList.count-1)/6{
             let HStack = UIStackView()
             HStack.tag = num
             HStack.axis  = .horizontal
@@ -128,10 +134,16 @@ class PlayerRoomViewController: UIViewController {
         
         var index = 0
         for (name, dic) in playerList{
-            if let assignedStack = outerVStack.viewWithTag(index/5) as? UIStackView{
+            if let assignedStack = outerVStack.viewWithTag(index/6) as? UIStackView{
                 let emoji = dic["emoji"] ?? "No emoji got."
+                
                 let attributedText = NSMutableAttributedString(string: "\(emoji)\n", attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .largeTitle)])
-                attributedText.append(NSAttributedString(string: "\(name)", attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .title2)]))
+                let attributes: [NSAttributedString.Key: Any] = [
+                    .font: UIFont.preferredFont(forTextStyle: .title2),
+                    .foregroundColor: UIColor.black,
+                ]
+                attributedText.append(NSAttributedString(string: "\(name)", attributes: attributes))
+                
                 let label = UILabel()
                 label.attributedText = attributedText
                 label.numberOfLines = 2
